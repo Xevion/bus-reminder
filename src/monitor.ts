@@ -54,7 +54,8 @@ function getDuration(start: Date, end: Date) {
 export default async function monitorAsync<T = any>(execute: () => Promise<T>): Promise<T> {
     // Tell Cronitor that the job is running
     const start = new Date();
-    await fetch(buildURL({state: "run"}).toString());
+    const series = start.getTime().toString();
+    await fetch(buildURL({state: "run", series}).toString());
     console.log("Cronitor: Job started")
 
     // Execute the function, provide try/catch
@@ -63,14 +64,14 @@ export default async function monitorAsync<T = any>(execute: () => Promise<T>): 
         result = await execute();
     } catch (error) {
         const duration = getDuration(start, new Date());
-        await fetch(buildURL({state: "fail", message: error instanceof Error ? error.message : undefined, metric: {duration}}).toString());
+        await fetch(buildURL({state: "fail", series, message: error instanceof Error ? error.message : undefined, metric: {duration}}).toString());
         throw error;
     }
 
     // Tell Cronitor that the job is complete (success)
     console.log("Cronitor: Job completed")
     const duration = getDuration(start, new Date());
-    await fetch(buildURL({state: "complete", metric: {duration}}).toString());
+    await fetch(buildURL({state: "complete", series, metric: {duration}}).toString());
 
     return result as T;
 }
