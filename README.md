@@ -1,4 +1,5 @@
 # bus-reminder
+
 ![Location Check](https://cronitor.io/badges/8frC2k/production/XcmWhvdYm0OyCRuinS1IP6MEUiE.svg)
 
 A cron-job based personal notification system for myself.
@@ -31,7 +32,7 @@ Next.js was complete overkill for this, and in retrospect, using something like 
 [cronitor]: https://cronitor.io
 [cron-jobs]: https://cron-jobs.org
 
-
 ## TODO
+
 - Integrate Discord notifications
 - Create system for dynamically disabling the check for the rest of the day ([Upstash](upstash.com) for Redis)

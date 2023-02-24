@@ -2,7 +2,10 @@ import { env } from "@/env/server.mjs";
 // @ts-ignore
 import * as life360 from "life360-node-api";
 
-const center = {longitude: env.CENTER_LONGITUDE, latitude: env.CENTER_LATITUDE};
+const center = {
+  longitude: env.CENTER_LONGITUDE,
+  latitude: env.CENTER_LATITUDE,
+};
 const MILES_PER_NAUTICAL_MILE = 1.15078;
 const KILOMETERS_PER_MILE = 1.60934;
 
@@ -24,24 +27,25 @@ export function distance(
     const radlat2 = (Math.PI * b.latitude) / 180;
     const theta = a.longitude - b.longitude;
     const radtheta = (Math.PI * theta) / 180;
-    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    
-      if (dist > 1)
-      dist = 1;
+    let dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+
+    if (dist > 1) dist = 1;
 
     dist = Math.acos(dist);
     dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * MILES_PER_NAUTICAL_MILE;  // Convert to miles
+    dist = dist * 60 * MILES_PER_NAUTICAL_MILE; // Convert to miles
 
     // Convert to the specified unit
     switch (unit) {
-        case "K":
-            return dist * KILOMETERS_PER_MILE;
-        case "N":
-            return dist / MILES_PER_NAUTICAL_MILE;
-        case "M":
-        default:
-            return dist;
+      case "K":
+        return dist * KILOMETERS_PER_MILE;
+      case "N":
+        return dist / MILES_PER_NAUTICAL_MILE;
+      case "M":
+      default:
+        return dist;
     }
   }
 }
@@ -50,7 +54,7 @@ export function distance(
  * @returns The distance in meters between me and the center
  */
 export async function getDistance(): Promise<number> {
-    // Setup the Life360 API client
+  // Setup the Life360 API client
   const client = await life360.login(
     env.LIFE360_USERNAME,
     env.LIFE360_PASSWORD

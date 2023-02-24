@@ -18,7 +18,7 @@ const center = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData & StatusData | StatusData>
+  res: NextApiResponse<(ResponseData & StatusData) | StatusData>
 ) {
   if (req.query.key != env.API_KEY) {
     // auth failed
