@@ -1,4 +1,5 @@
 # bus-reminder
+![Location Check](https://cronitor.io/badges/8frC2k/production/XcmWhvdYm0OyCRuinS1IP6MEUiE.svg)
 
 A cron-job based personal notification system for myself.
 
