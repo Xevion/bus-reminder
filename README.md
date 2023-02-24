@@ -1,38 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# bus-reminder
 
-## Getting Started
+A cron-job based personal notification system for myself.
 
-First, run the development server:
+## Purpose
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+I have a problem with letting time get away from me, and in turn, I have accidentally missed the last bus several times.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Additionally, I allow my parentals (who live 200 miles away from me) to make sure I'm safe using the location tracking app Life360. For background, I consented to this and brought up it's usage in the first place, so I do not mind it.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+After thinking about it, I thought it might be a great idea to use their location data for myself: I could check my location occasionally, and if I'm still at the library on weekdays right before the bus stops running, I can send myself a notification.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+And that's pretty much the whole idea.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Next.js was complete overkill for this, and in retrospect, using something like AWS Lambda or Azure Functions may be much more ideal. Even Cloudflare Workers might be easier (although I require Node APIs, I believe).
 
-## Learn More
+- [Next.js][nextjs]
+- [`life360-node-api`][life360-node-api] for the Life360 API
+- [Vercel][vercel] for Serverless Functions
+- [Cronitor][cronitor] for Cron Job Monitoring
+- [cron-jobs.org][cron-jobs] for Cron Job Execution
+  - Why both, you may ask? I prefer Cronitor's more verbose telemetry API, and I plan to switch off Vercel eventually.
+  - Vercel has cron jobs, why not use that? Because Vercel requires a Pro plan for cron jobs that execute more than once a day. I unfortunately do not need anything other than cron jobs.
 
-To learn more about Next.js, take a look at the following resources:
+[nextjs]: https://nextjs.org/
+[life360-node-api]: https://github.com/kaylathedev/life360-node-api
+[vercel]: https://vercel.com
+[cronitor]: https://cronitor.io
+[cron-jobs]: https://cron-jobs.org
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## TODO
+- Integrate Discord notifications
+- Create system for dynamically disabling the check for the rest of the day ([Upstash](upstash.com) for Redis)
