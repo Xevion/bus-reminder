@@ -20,10 +20,11 @@ export default async function handler(
     return;
   }
 
+  
   const diff = await getDistance();
 
   // auth passed
-  res.setHeader('Cache-Control', 'max-age=0, s-maxage=60, stale-while-revalidate');
+  res.setHeader('Cache-Control', `max-age=0, s-maxage=${env.EDGE_CACHE_TIME_SECONDS}, stale-while-revalidate`);
   // @ts-ignore
   res.status(200).json({ diff, inRange: diff < env.MAX_DISTANCE });
 }

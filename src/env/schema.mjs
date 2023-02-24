@@ -15,4 +15,5 @@ export const serverSchema = z.object({
   MAX_DISTANCE: z.coerce.number().positive(),
   CENTER_LATITUDE: z.coerce.number().min(-90).max(90),
   CENTER_LONGITUDE: z.coerce.number().min(-180).max(180),
+  EDGE_CACHE_TIME_SECONDS: z.coerce.number().int().nonnegative().default(60),
 });

@@ -16,6 +16,7 @@ const _serverEnv = serverSchema.safeParse({
   MAX_DISTANCE: process.env.MAX_DISTANCE,
   CENTER_LATITUDE: process.env.CENTER_LATITUDE,
   CENTER_LONGITUDE: process.env.CENTER_LONGITUDE,
+  EDGE_CACHE_TIME_SECONDS: process.env.EDGE_CACHE_TIME_SECONDS,
 });
 
 if (_serverEnv.success === false) {
