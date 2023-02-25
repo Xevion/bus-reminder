@@ -16,5 +16,6 @@ export const serverSchema = z.object({
 	CENTER_LATITUDE: z.coerce.number().min(-90).max(90),
 	CENTER_LONGITUDE: z.coerce.number().min(-180).max(180),
 	EDGE_CACHE_TIME_SECONDS: z.coerce.number().int().nonnegative().default(60),
-	REDIS_URL: z.string().url()
+	REDIS_URL: z.string().url(),
+	DISCORD_TOKEN: z.string()
 });
