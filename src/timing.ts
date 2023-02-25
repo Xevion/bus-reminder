@@ -215,7 +215,6 @@ export async function getMatchingTime(
 ): Promise<TimeConfig | null> {
 	const times = config.times.filter((time) => {
 		// If the day doesn't match, skip.
-		console.log(dayAsNumber[now.getDay().toString()]);
 		if (!time.days.has(dayAsNumber[now.getDay().toString()])) return false;
 
 		const startTime = time.time;
