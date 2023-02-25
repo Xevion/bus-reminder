@@ -1,14 +1,40 @@
+import { Configuration, ConfigurationSchema } from './timing';
 import { Redis } from 'ioredis';
 import { env } from '@/env/server.mjs';
 import { format } from 'date-fns';
 
-console.log(env.REDIS_URL);
 const redis = new Redis(env.REDIS_URL, { maxRetriesPerRequest: 2 });
 
-export async function test() {
-	const now = new Date();
-	const key = format(now, 'yyyy-MM-dd');
+export async function fetchConfiguration(
+	defaultConfig?: object
+): Promise<Configuration> {
+	const config = await redis.get('config');
+	if (config == null)
+		if (defaultConfig != undefined)
+			return ConfigurationSchema.parse(defaultConfig);
+		else throw new Error('Configuration not found in Redis');
+	return ConfigurationSchema.parse(JSON.parse(config));
+}
 
-	const current = await redis.incr(key);
-	return current;
+export function getKey(identifier: string, now: Date) {
+	return format(now, 'yyyy-MM-dd') + ':' + identifier;
+}
+
+export async function checkIdentifier(
+	identifier: string,
+	now: Date = new Date()
+): Promise<boolean> {
+	const key = getKey(identifier, now);
+	return (await redis.get(key)) === '1';
+}
+
+export async function markIdentifier(
+	identifier: string,
+	value: boolean = true,
+	expiry?: number,
+	now: Date = new Date()
+) {
+	const key = getKey(identifier, now);
+	if (expiry == undefined) return await redis.set(key, value ? '1' : '0');
+	return await redis.set(key, value ? '1' : '0', 'EX', expiry);
 }
