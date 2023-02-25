@@ -20,6 +20,7 @@ type DayEnum = z.infer<typeof DayEnumSchema>;
 const TimeConfigSchema = z.object({
 	// A short name to be included in notifications
 	name: z.string(),
+	message: z.string(),
 	// The time this notification is intended for. e.g. "12:00", 24 hour time
 	time: z.string().transform((time, ctx) => {
 		if (!time.match(/^[0-9]{2}:[0-9]{2}$/)) {

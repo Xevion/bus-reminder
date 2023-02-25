@@ -45,6 +45,7 @@ export default async function handler(
 				{
 					time: '03:13',
 					maxLate: '00:10',
+					message: 'The bus is leaving soon.',
 					days: [
 						'monday',
 						'tuesday',
@@ -57,10 +58,11 @@ export default async function handler(
 					name: 'B'
 				},
 				{
+					name: 'A',
+					message: 'The bus is leaving soon.',
 					time: '23:26',
 					maxLate: '00:10',
-					days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'],
-					name: 'A'
+					days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 				}
 			]
 		});
@@ -77,7 +79,7 @@ export default async function handler(
 		if (await checkIdentifier(matching.name, now)) return 'already-notified';
 
 		// Send notification, mark
-		await sendNotification(`The bus is leaving soon. (${matching.name}))`);
+		await sendNotification(`${matching.message} (${matching.name})`);
 		await markIdentifier(matching.name, true, 60 * 60 * 24 * 31, now);
 
 		return 'notified';
