@@ -17,7 +17,7 @@ export async function sendNotification(message: string): Promise<void> {
 	}
 
 	try {
-		await client.users.send('184118083143598081', message);
+		await client.users.send(env.DISCORD_TARGET_USER_ID, message);
 	} catch (e) {
 		throw new Error(
 			`Failed while sending message: ${e instanceof Error ? e.message : e}`
