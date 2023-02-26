@@ -28,16 +28,18 @@ AWS Lambda or Azure Functions may be much more ideal. Even Cloudflare Workers
 might be easier (although I require Node APIs, I believe).
 
 - [Next.js][nextjs]
+  - Overkill for the most part, I will eventually transfer to AWS Lambda with
+    Express
 - [`life360-node-api`][life360-node-api] for the Life360 API
-- [Vercel][vercel] for Serverless Functions
-- [Cronitor][cronitor] for Cron Job Monitoring
+- [Vercel][vercel] for Serverless Functions (free)
+- [Cronitor][cronitor] for Cron Job Monitoring (free)
 - [cron-jobs.org][cron-jobs] for Cron Job Execution
   - Why both, you may ask? I prefer Cronitor's more verbose telemetry API, and I
     plan to switch off Vercel eventually.
   - Vercel has cron jobs, why not use that? Because Vercel requires a Pro plan
     for cron jobs that execute more than once a day. I unfortunately do not need
     anything other than cron jobs.
-- [Upstash][upstash]
+- [Upstash][upstash] for Redis (free)
 - [Discord][discord]
 
 [nextjs]: https://nextjs.org/
