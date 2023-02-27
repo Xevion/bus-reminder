@@ -40,7 +40,7 @@ might be easier (although I require Node APIs, I believe).
     for cron jobs that execute more than once a day. I unfortunately do not need
     anything other than cron jobs.
 - [Upstash][upstash] for Redis (free)
-- [Discord][discord]
+- [Discord][discord] to deliver notifications via Bot account.
 
 [nextjs]: https://nextjs.org/
 [life360-node-api]: https://github.com/kaylathedev/life360-node-api
