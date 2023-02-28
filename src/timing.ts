@@ -45,10 +45,9 @@ const TimeConfigSchema = z.object({
 		return parsed;
 	}),
 	// The days this configuration is active on.
-	days: z.preprocess((v) => {
-		const parsedArray = z.any().array().parse(v);
-		return new Set(parsedArray);
-	}, z.set(DayEnumSchema).nonempty()),
+	days: z.array(DayEnumSchema).nonempty().transform(arr => {
+		return new Set<DayEnum>(arr);
+	}),
 	// If a notification isn't delivery within 10 minutes e.g. "00:30", 24 hour time
 	maxLate: z
 		.string()
