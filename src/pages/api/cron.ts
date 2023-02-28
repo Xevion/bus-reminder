@@ -40,32 +40,7 @@ export default async function handler(
 	async function innerFunction(): Promise<ResponseStatus> {
 		const now = new Date();
 
-		const config = await fetchConfiguration({
-			times: [
-				{
-					time: '03:13',
-					maxLate: '00:10',
-					message: 'The bus is leaving soon.',
-					days: [
-						'monday',
-						'tuesday',
-						'wednesday',
-						'thursday',
-						'friday',
-						'saturday',
-						'sunday'
-					],
-					name: 'B'
-				},
-				{
-					name: 'A',
-					message: 'The bus is leaving soon.',
-					time: '23:26',
-					maxLate: '00:10',
-					days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
-				}
-			]
-		});
+		const config = await fetchConfiguration();
 		const matching = await getMatchingTime(config, now);
 
 		// No matching time - no notification to send.

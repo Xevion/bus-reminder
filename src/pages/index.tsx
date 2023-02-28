@@ -43,6 +43,33 @@ export async function getServerSideProps({
 	};
 }
 
+const exampleConfiguration = {
+	times: [
+		{
+			time: '03:13',
+			maxLate: '00:10',
+			message: 'The bus is leaving soon.',
+			days: [
+				'monday',
+				'tuesday',
+				'wednesday',
+				'thursday',
+				'friday',
+				'saturday',
+				'sunday'
+			],
+			name: 'B'
+		},
+		{
+			name: 'A',
+			message: 'The bus is leaving soon.',
+			time: '23:26',
+			maxLate: '00:10',
+			days: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+		}
+	]
+};
+
 const IndexPage: NextPage<Props> = ({ config }) => {
 	const [code, setCode] = useState(config);
 	const router = useRouter();
@@ -103,7 +130,16 @@ const IndexPage: NextPage<Props> = ({ config }) => {
 						</div>
 						<div className="flex justify-between pt-2">
 							<div className="flex-shrink-0">{validationElement}</div>
-							<div className="flex-shrink-0">
+							<div className="flex-shrink-0 space-x-4">
+								<button
+									onClick={(e) => {
+										e.preventDefault();
+										setCode(JSON.stringify(exampleConfiguration, null, 4));
+									}}
+									className="inline-flex items-center rounded-md border border-transparent bg-zinc-700 hover:bg-zinc-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+								>
+									Load Example
+								</button>
 								<button
 									type="submit"
 									className="inline-flex items-center rounded-md border border-transparent bg-indigo-700 hover:bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
