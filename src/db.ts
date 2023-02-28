@@ -20,6 +20,10 @@ export async function fetchConfiguration(
 	return getParsed ? parsed : json;
 }
 
+export async function setConfiguration(config: any): Promise<'OK'> {
+	return redis.set('config', JSON.stringify(config));
+}
+
 export function getKey(identifier: string, now: Date) {
 	return format(now, 'yyyy-MM-dd') + ':' + identifier;
 }
