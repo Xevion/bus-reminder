@@ -6,12 +6,13 @@ import {
 import { z } from 'zod';
 import { env } from '@/env/server.mjs';
 import Editor from 'react-simple-code-editor';
-import { useState } from 'react';
-import { highlight, languages } from 'prismjs/components/prism-core';
+import { ReactNode, useState } from 'react';
+import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-json';
 import { fetchConfiguration } from '@/db';
 import { useForm } from 'react-hook-form';
 import { ConfigurationSchema } from '@/timing';
+import { useRouter } from 'next/router';
 
 type Props = {
 	config: string;
@@ -44,7 +45,10 @@ export async function getServerSideProps({
 
 const IndexPage: NextPage<Props> = ({ config }) => {
 	const [code, setCode] = useState(config);
-	const [valid, setValid] = useState<boolean | null>(null);
+	const router = useRouter();
+	const [validationElement, setValidationElement] = useState<ReactNode | null>(
+		null
+	);
 	const [parseError, setParseError] = useState<string | any>(null);
 	const { register, handleSubmit } = useForm();
 
@@ -56,7 +60,17 @@ const IndexPage: NextPage<Props> = ({ config }) => {
 			console.log(parsedConfig.error);
 			setParseError(parsedConfig.error);
 		}
-		setValid(parsedConfig.success);
+		setValidationElement(
+			parsedConfig.success ? 'Valid Configuration' : 'Invalid Configuration'
+		);
+
+		if (parsedConfig.success) {
+			const response = await fetch(`/api/config?key=${router.query?.key}`, {
+				method: 'POST',
+				body: code
+			});
+			console.log(response);
+		}
 	}
 
 	return (
@@ -77,7 +91,7 @@ const IndexPage: NextPage<Props> = ({ config }) => {
 							<Editor
 								value={code}
 								onValueChange={(code) => setCode(code)}
-								highlight={(code) => highlight(code, languages.json)}
+								highlight={(code) => highlight(code, languages.json, 'json')}
 								padding={20}
 								preClassName="language-json overflow-y-scroll"
 								textareaClassName="border-zinc-700/70 overflow-y-scroll"
@@ -88,15 +102,7 @@ const IndexPage: NextPage<Props> = ({ config }) => {
 							/>
 						</div>
 						<div className="flex justify-between pt-2">
-							<div className="flex-shrink-0">
-								<span>
-									{valid != null
-										? valid
-											? 'Valid Configuration'
-											: 'Invalid Configuration'
-										: null}
-								</span>
-							</div>
+							<div className="flex-shrink-0">{validationElement}</div>
 							<div className="flex-shrink-0">
 								<button
 									type="submit"
