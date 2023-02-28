@@ -6,14 +6,18 @@ import { format } from 'date-fns';
 const redis = new Redis(env.REDIS_URL, { maxRetriesPerRequest: 2 });
 
 export async function fetchConfiguration(
-	defaultConfig?: object
+	defaultConfig?: object,
+	getParsed = true
 ): Promise<Configuration> {
 	const config = await redis.get('config');
 	if (config == null)
 		if (defaultConfig != undefined)
 			return ConfigurationSchema.parse(defaultConfig);
 		else throw new Error('Configuration not found in Redis');
-	return ConfigurationSchema.parse(JSON.parse(config));
+
+	const json = JSON.parse(config);
+	const parsed = ConfigurationSchema.parse(json);
+	return getParsed ? parsed : json;
 }
 
 export function getKey(identifier: string, now: Date) {

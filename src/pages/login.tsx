@@ -17,7 +17,6 @@ const LoginPage: NextPage = () => {
             router.push({pathname: "/", query: {"key": data.token}}).then();
         } else
             setError(true);
-        console.log(response);
     }
 
     return <div className="flex bg-zinc-900 min-h-screen h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
