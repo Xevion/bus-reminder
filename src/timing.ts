@@ -45,9 +45,12 @@ const TimeConfigSchema = z.object({
 		return parsed;
 	}),
 	// The days this configuration is active on.
-	days: z.array(DayEnumSchema).nonempty().transform(arr => {
-		return new Set<DayEnum>(arr);
-	}),
+	days: z
+		.array(DayEnumSchema)
+		.nonempty()
+		.transform((arr) => {
+			return new Set<DayEnum>(arr);
+		}),
 	// If a notification isn't delivery within 10 minutes e.g. "00:30", 24 hour time
 	maxLate: z
 		.string()
@@ -211,19 +214,21 @@ const dayAsNumber: Record<string, DayEnum> = {
 
 export async function getMatchingTime(
 	config: Configuration,
-	now = new Date()
+	now: Date = new Date()
 ): Promise<TimeConfig | null> {
 	const times = config.times.filter((time) => {
 		// If the day doesn't match, skip.
 		if (!time.days.has(dayAsNumber[now.getDay().toString()])) return false;
+		const nowTime = {
+			hours: now.getHours(),
+			minutes: now.getMinutes()
+		};
 
 		const startTime = time.time;
 		const endTime = addTime(
 			time.time,
 			time.maxLate ?? { hours: 0, minutes: 0 }
 		);
-
-		const nowTime = { hours: now.getHours(), minutes: now.getMinutes() };
 
 		return (
 			compareTime(nowTime, startTime) >= 0 && compareTime(nowTime, endTime) <= 0
