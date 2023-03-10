@@ -1,6 +1,7 @@
 // @ts-check
 import { z } from 'zod';
 
+// @ts-ignore
 const TimezoneSchema = z.enum(Intl.supportedValuesOf("timeZone"));
 /**
  * Specify your server-side environment variables schema here.
