@@ -19,7 +19,8 @@ const _serverEnv = serverSchema.safeParse({
 	EDGE_CACHE_TIME_SECONDS: process.env.EDGE_CACHE_TIME_SECONDS,
 	REDIS_URL: process.env.REDIS_URL,
 	DISCORD_TOKEN: process.env.DISCORD_TOKEN,
-	DISCORD_TARGET_USER_ID: process.env.DISCORD_TARGET_USER_ID
+	DISCORD_TARGET_USER_ID: process.env.DISCORD_TARGET_USER_ID,
+	TIMEZONE: process.env.TIMEZONE
 });
 
 if (_serverEnv.success === false) {

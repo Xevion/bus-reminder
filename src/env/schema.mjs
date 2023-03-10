@@ -1,6 +1,7 @@
 // @ts-check
 import { z } from 'zod';
 
+const TimezoneSchema = z.enum(Intl.supportedValuesOf("timeZone"));
 /**
  * Specify your server-side environment variables schema here.
  * This way you can ensure the app isn't built with invalid env vars.
@@ -18,5 +19,6 @@ export const serverSchema = z.object({
 	EDGE_CACHE_TIME_SECONDS: z.coerce.number().int().nonnegative().default(60),
 	REDIS_URL: z.string().url(),
 	DISCORD_TOKEN: z.string(),
-	DISCORD_TARGET_USER_ID: z.string()
+	DISCORD_TARGET_USER_ID: z.string(),
+	TIMEZONE: TimezoneSchema
 });

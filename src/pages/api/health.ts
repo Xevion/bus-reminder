@@ -5,6 +5,7 @@ import { env } from "@/env/server.mjs";
 type ResponseData = {
   now: number;
   status: string;
+  timezone: string;
 };
 
 export default async function handler(
@@ -14,5 +15,6 @@ export default async function handler(
   res.status(200).json({
     now: new Date().getTime(),
     status: req.query.key == env.API_KEY ? "Authorized" : "Unauthorized",
+    timezone: env.TIMEZONE
   });
 }
