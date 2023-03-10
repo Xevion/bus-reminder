@@ -6,13 +6,14 @@ import { env } from '@/env/server.mjs';
 import monitorAsync from '@/monitor';
 import { sendNotification } from '@/notify';
 import { fetchConfiguration, checkIdentifier, markIdentifier } from '@/db';
+import { localNow } from '@/utils/timezone';
 
 type ResponseData = {
 	diff: number;
 	inRange: boolean;
 };
 
-type StatusData = { status: ResponseStatus };
+type StatusData = { status: ResponseStatus; key?: string };
 
 type ResponseStatus =
 	| 'unauthorized'
@@ -37,27 +38,31 @@ export default async function handler(
 		return;
 	}
 
-	async function innerFunction(): Promise<ResponseStatus> {
-		const now = new Date();
+	async function innerFunction(): Promise<{
+		status: ResponseStatus;
+		key?: string;
+	}> {
+		const now = localNow();
 
 		const config = await fetchConfiguration();
 		const matching = await getMatchingTime(config, now);
 
 		// No matching time - no notification to send.
-		if (matching == null) return 'no-matching-time';
+		if (matching == null) return { status: 'no-matching-time' };
 
 		// Check if I am in range of the center
 		const distanceToCenter = await getDistance();
-		if (distanceToCenter > 280) return 'out-of-range';
+		if (distanceToCenter > 280) return { status: 'out-of-range' };
 
 		// Check if I have already been notified
-		if (await checkIdentifier(matching.name, now)) return 'already-notified';
+		const { marked, key } = await checkIdentifier(matching.name, now);
+		if (marked) return { status: 'already-notified', key };
 
 		// Send notification, mark
 		await sendNotification(`${matching.message} (${matching.name})`);
 		await markIdentifier(matching.name, true, 60 * 60 * 24 * 31, now);
 
-		return 'notified';
+		return { status: 'notified', key };
 	}
 
 	try {
@@ -65,7 +70,7 @@ export default async function handler(
 		if (process.env.NODE_ENV === 'production')
 			result = await monitorAsync(innerFunction);
 		else result = await innerFunction();
-		res.status(200).json({ status: result });
+		res.status(200).json({ status: result.status, key: result.key });
 	} catch (e) {
 		console.error(e);
 		res.status(500).json({ status: 'error' });
