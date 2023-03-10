@@ -5,7 +5,7 @@ import { getDistance } from '@/location';
 import { env } from '@/env/server.mjs';
 import monitorAsync from '@/monitor';
 import { sendNotification } from '@/notify';
-import { fetchConfiguration, checkIdentifier, markIdentifier } from '@/db';
+import { checkIdentifier, fetchConfiguration, markIdentifier } from '@/db';
 import { localNow } from '@/utils/timezone';
 
 type ResponseData = {
@@ -67,7 +67,10 @@ export default async function handler(
 
 	try {
 		let result;
-		if (process.env.NODE_ENV === 'production')
+		if (
+			process.env.NODE_ENV === 'production' &&
+			(req.query.report ?? 'true') === 'true'
+		)
 			result = await monitorAsync(innerFunction);
 		else result = await innerFunction();
 		res.status(200).json({ status: result.status, key: result.key });
