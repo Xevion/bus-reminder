@@ -16,8 +16,7 @@ const _serverEnv = serverSchema.safeParse({
 	MAX_DISTANCE: process.env.MAX_DISTANCE,
 	CENTER_LATITUDE: process.env.CENTER_LATITUDE,
 	CENTER_LONGITUDE: process.env.CENTER_LONGITUDE,
-	EDGE_CACHE_TIME_SECONDS: process.env.EDGE_CACHE_TIME_SECONDS,
-	REDIS_URL: process.env.REDIS_URL,
+ 	REDIS_URL: process.env.REDIS_URL,
 	DISCORD_TOKEN: process.env.DISCORD_TOKEN,
 	DISCORD_TARGET_USER_ID: process.env.DISCORD_TARGET_USER_ID,
 	TIMEZONE: process.env.TIMEZONE
@@ -42,4 +41,5 @@ for (let key of Object.keys(_serverEnv.data)) {
 	}
 }
 
+// Why is destructing necessary here? Type
 export const env = { ..._serverEnv.data };
