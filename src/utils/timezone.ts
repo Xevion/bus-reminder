@@ -2,8 +2,11 @@ import { utcToZonedTime } from 'date-fns-tz';
 import { z } from 'zod';
 import { env } from '@/env/server.mjs';
 
-// @ts-ignore TS2339 -- TODO: Figure out why Intl.supportedValuesOf isn't seen by Typescript
-export const TimezoneSchema = z.enum(Intl.supportedValuesOf('timeZone'));
+// If this line fails in Typescript, then install typescript@^5.1.3
+export const TimezoneSchema = z.enum(
+	// 'as' to assume at least one element
+	Intl.supportedValuesOf('timeZone') as [string, ...string[]]
+);
 export type Timezone = z.infer<typeof TimezoneSchema>;
 
 export function localNow(now?: Date, zone?: Timezone): Date {

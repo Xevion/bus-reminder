@@ -56,7 +56,7 @@ export function distance(
 export async function getDistance(): Promise<number> {
 	let client;
 	try {
-		// Setup the Life360 API client
+		// Set up the Life360 API client
 		client = await life360.login(env.LIFE360_USERNAME, env.LIFE360_PASSWORD);
 	} catch (e) {
 		throw new Error(
