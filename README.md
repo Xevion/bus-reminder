@@ -42,6 +42,15 @@ might be easier (although I require Node APIs, I believe).
 - [Upstash][upstash] for Redis (free)
 - [Discord][discord] to deliver notifications via Bot account.
 
+## Setup
+
+- Requires Node v18 (`Intl.supportedValuesOf` will issue type errors otherwise)
+- Requires credentials specified in `.env` (use [`.env.example`](./.env.example) as a template)
+  - Redis
+  - Discord
+  - Life360 (username, password)
+  - Optional: Loki (logging)
+
 [nextjs]: https://nextjs.org/
 [life360-node-api]: https://github.com/kaylathedev/life360-node-api
 [vercel]: https://vercel.com
