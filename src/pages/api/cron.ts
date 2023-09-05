@@ -21,7 +21,12 @@ type ResponseData = {
 
 type StatusData = {
 	status: ResponseStatus;
-	identifier?: { name: string; key?: string };
+	identifier?: Identifier;
+};
+
+type Identifier = {
+	name: string;
+	key?: string;
 };
 
 type ResponseStatus =
@@ -40,7 +45,7 @@ export default async function handler(
 
 	async function innerFunction(): Promise<{
 		status: ResponseStatus;
-		identifier?: { name: string; key?: string };
+		identifier?: Identifier;
 	}> {
 		const now = localNow();
 
@@ -52,12 +57,13 @@ export default async function handler(
 
 		// Get the key for this notification (name + time)
 		const key = getKey(matching.name, now);
+		const identifier = { name: matching.name, key };
 
 		// Check if I am in range of the center
 		const distanceResult = await getDistance();
 		if (distanceResult.isErr) {
 			logger.error(distanceResult.error);
-			return { status: 'error' };
+			return { status: 'error', identifier };
 		}
 
 		// TODO: Properly draw from environment MAX_DISTANCE
@@ -65,7 +71,7 @@ export default async function handler(
 		if (distance > 280)
 			return {
 				status: 'out-of-range',
-				identifier: { name: matching.name, key }
+				identifier
 			};
 
 		// Check if I have already been notified
@@ -73,17 +79,14 @@ export default async function handler(
 		if (marked)
 			return {
 				status: 'already-notified',
-				identifier: {
-					name: matching.name,
-					key
-				}
+				identifier
 			};
 
 		// Send notification, mark (expire in 1 month)
 		await sendNotification(`${matching.message} (${matching.name})`);
 		await markIdentifier(key, true, 60 * 60 * 24 * 31);
 
-		return { status: 'notified', identifier: { name: matching.name, key } };
+		return { status: 'notified', identifier };
 	}
 
 	try {
