@@ -7,6 +7,7 @@ import { serverSchema } from './schema.mjs';
 import { formatErrors } from './util.mjs';
 
 const _serverEnv = serverSchema.safeParse({
+	NODE_ENV: process.env.NODE_ENV,
 	API_KEY: process.env.API_KEY,
 	CRONITOR_ACCOUNT_ID: process.env.CRONITOR_ACCOUNT_ID,
 	CRONITOR_JOB_ID: process.env.CRONITOR_JOB_ID,
@@ -19,7 +20,10 @@ const _serverEnv = serverSchema.safeParse({
  	REDIS_URL: process.env.REDIS_URL,
 	DISCORD_TOKEN: process.env.DISCORD_TOKEN,
 	DISCORD_TARGET_USER_ID: process.env.DISCORD_TARGET_USER_ID,
-	TIMEZONE: process.env.TIMEZONE
+	TIMEZONE: process.env.TIMEZONE,
+	LOKI_HOST: process.env.LOKI_HOST,
+	LOKI_USERNAME: process.env.LOKI_USERNAME,
+	LOKI_PASSWORD: process.env.LOKI_PASSWORD,
 });
 
 if (_serverEnv.success === false) {

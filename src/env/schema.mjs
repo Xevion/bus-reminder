@@ -9,6 +9,7 @@ const TimezoneSchema = z.enum(Intl.supportedValuesOf("timeZone"));
  * This way you can ensure the app isn't built with invalid env vars.
  */
 export const serverSchema = z.object({
+	NODE_ENV: z.string(),
 	API_KEY: z.string(),
 	CRONITOR_ACCOUNT_ID: z.string(),
 	CRONITOR_JOB_ID: z.string(),
@@ -21,5 +22,8 @@ export const serverSchema = z.object({
 	REDIS_URL: z.string().url(),
 	DISCORD_TOKEN: z.string(),
 	DISCORD_TARGET_USER_ID: z.string(),
-	TIMEZONE: TimezoneSchema
+	TIMEZONE: TimezoneSchema,
+	LOKI_HOST: z.string().url(),
+	LOKI_USERNAME: z.string(),
+	LOKI_PASSWORD: z.string(),
 });
