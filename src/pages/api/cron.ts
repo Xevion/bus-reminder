@@ -90,8 +90,10 @@ export default async function handler(
 	}
 
 	try {
+		logger.debug('Evaluating cron...');
+
 		let result;
-		if (process.env.NODE_ENV === 'production' && parseBoolean(req.query.report))
+		if (process.env.NODE_ENV === 'production' && parseBoolean(req.query.report ?? 'true'))
 			result = await monitorAsync(innerFunction);
 		else result = await innerFunction();
 
