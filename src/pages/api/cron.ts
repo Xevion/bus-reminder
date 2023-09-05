@@ -12,7 +12,7 @@ import {
 } from '@/db';
 import { localNow } from '@/utils/timezone';
 import logger from '@/logger';
-import { unauthorized } from '@/utils/helpers';
+import { parseBoolean, unauthorized } from '@/utils/helpers';
 
 type ResponseData = {
 	diff: number;
@@ -87,11 +87,7 @@ export default async function handler(
 
 	try {
 		let result;
-		if (
-			process.env.NODE_ENV === 'production' &&
-			// TODO: Proper boolean parsing
-			(req.query.report ?? 'true') === 'true'
-		)
+		if (process.env.NODE_ENV === 'production' && parseBoolean(req.query.report))
 			result = await monitorAsync(innerFunction);
 		else result = await innerFunction();
 
