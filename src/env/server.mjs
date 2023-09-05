@@ -31,7 +31,10 @@ if (_serverEnv.success === false) {
 		'❌ Invalid environment variables:\n',
 		...formatErrors(_serverEnv.error.format())
 	);
-	throw new Error('Invalid environment variables');
+
+	throw new Error(`Invalid environment variables (${
+		_serverEnv.error.errors.map(({ path }) => path).join(', ')
+	})`);
 }
 
 /**
