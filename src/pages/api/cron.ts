@@ -87,10 +87,19 @@ export default async function handler(
 				identifier
 			};
 
+		const isDry = parseBoolean(req.query.dry ?? 'false');
+		logger.info(
+			!isDry
+				? 'Sending notification, marking identifier.'
+				: 'Dry run, not sending notification or marking identifier.',
+			{ identifier }
+		);
+		
 		// Send notification, mark (expire in 1 month)
-		logger.info('Sending notification, marking identifier.', { identifier });
-		await sendNotification(`${matching.message} (${matching.name})`);
-		await markIdentifier(key, true, 60 * 60 * 24 * 31);
+		if (!isDry) {
+			await sendNotification(`${matching.message} (${matching.name})`);
+			await markIdentifier(key, true, 60 * 60 * 24 * 31);
+		}
 
 		return { status: 'notified', identifier };
 	}

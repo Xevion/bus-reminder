@@ -67,7 +67,6 @@ might be easier (although I require Node APIs, I believe).
 - `/api/cron` is the primary cron-job endpoint. Authorization required.
     - `?report=true` is assumed, and when `true`, Cronitor will be notified of the job's status. 
     - `?dry=true` will not send any notifications or effects, but will still perform all checks and logging for runtime testing.
-      - `?force=true` will skip configuration time checks and send notifications regardless of how long it's been since the last notification.
 - `/api/health` is a simple health check endpoint. Authorization optional.
 - `/api/check` is a simple endpoint to check authorization.
 - `/api/config` is the configuration endpoint. Authorization required.
