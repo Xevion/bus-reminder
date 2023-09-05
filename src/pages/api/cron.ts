@@ -53,9 +53,15 @@ export default async function handler(
 		const key = getKey(matching.name, now);
 
 		// Check if I am in range of the center
-		const distanceToCenter = await getDistance();
+		const distanceResult = await getDistance();
+		if (distanceResult.isErr) {
+			logger.error(distanceResult.error);
+			return { status: 'error' };
+		}
+
 		// TODO: Properly draw from environment MAX_DISTANCE
-		if (distanceToCenter > 280)
+		const distance = distanceResult.value;
+		if (distance > 280)
 			return {
 				status: 'out-of-range',
 				identifier: { name: matching.name, key }
@@ -87,9 +93,11 @@ export default async function handler(
 
 		logger.info('Cron evaluated.', { result });
 
-		res
-			.status(200)
-			.json({ status: result.status, identifier: result.identifier });
+		if (result.status === 'error') res.status(500).json({ status: 'error' });
+		else
+			res
+				.status(200)
+				.json({ status: result.status, identifier: result.identifier });
 	} catch (e) {
 		logger.error(e);
 		res.status(500).json({ status: 'error' });
