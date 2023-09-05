@@ -33,15 +33,12 @@ export async function checkIdentifier(key: string): Promise<boolean> {
 }
 
 export async function markIdentifier(
-	identifier: string,
+	key: string,
 	value: boolean = true,
-	expiry?: number,
-	now: Date = new Date()
-): Promise<{ key: string }> {
-	const key = getKey(identifier, now);
+	expiry?: number
+): Promise<void> {
+	const internalValue = value ? '1' : '0';
 
-	if (expiry == undefined) await redis.set(key, value ? '1' : '0');
-	else await redis.set(key, value ? '1' : '0', 'EX', expiry);
-
-	return { key };
+	if (expiry == undefined) await redis.set(key, internalValue);
+	else await redis.set(key, internalValue, 'EX', expiry);
 }

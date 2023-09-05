@@ -72,9 +72,9 @@ export default async function handler(
 				}
 			};
 
-		// Send notification, mark
+		// Send notification, mark (expire in 1 month)
 		await sendNotification(`${matching.message} (${matching.name})`);
-		await markIdentifier(matching.name, true, 60 * 60 * 24 * 31, now);
+		await markIdentifier(key, true, 60 * 60 * 24 * 31);
 
 		return { status: 'notified', identifier: { name: matching.name, key } };
 	}
