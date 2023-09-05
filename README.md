@@ -7,10 +7,10 @@ A cron-job based personal notification system for myself.
 ## Purpose
 
 I have a problem with letting time get away from me, and in turn, I have
-accidentally missed the last bus several times.
+accidentally missed the last bus of the day several times.
 
-Additionally, I allow my parentals (who live 200 miles away from me) to make
-sure I'm safe using the location tracking app Life360. For background, I
+Additionally, I allow my parentals (who live 200+ miles away from me) to make
+sure that I'm safe using the location tracking app 'Life360'. For background, I
 consented to this and brought up it's usage in the first place, so I do not mind
 it.
 
@@ -21,6 +21,17 @@ myself a notification.
 
 And that's pretty much the whole idea.
 
+## Features
+
+- 90% TypeScript
+- Cronitor monitoring
+- Fully validated `.env`
+- Interface for modifying configuration remotely, real-time
+  - Real-time syntax highlighting
+  - Client-side + Server-side validation of configuration via Zod
+- Discord notifications
+- Logging via [`winston`][winston] + Loki
+
 ## Stack
 
 Next.js was complete overkill for this, and in retrospect, using something like
@@ -28,8 +39,7 @@ AWS Lambda or Azure Functions may be much more ideal. Even Cloudflare Workers
 might be easier (although I require Node APIs, I believe).
 
 - [Next.js][nextjs]
-  - Overkill for the most part, I will eventually transfer to AWS Lambda with
-    Express
+  - Overkill for the most part, but hosting on Vercel is free, fast, and easy.
 - [`life360-node-api`][life360-node-api] for the Life360 API
 - [Vercel][vercel] for Serverless Functions (free)
 - [Cronitor][cronitor] for Cron Job Monitoring (free)
@@ -41,6 +51,7 @@ might be easier (although I require Node APIs, I believe).
     anything other than cron jobs.
 - [Upstash][upstash] for Redis (free)
 - [Discord][discord] to deliver notifications via Bot account.
+- [Graphana Loki][graphana-loki] for logging (free)
 
 ## Setup
 
@@ -51,6 +62,18 @@ might be easier (although I require Node APIs, I believe).
   - Life360 (username, password)
   - Optional: Loki (logging)
 
+## Live Testing
+
+- `/api/cron` is the primary cron-job endpoint. Authorization required.
+    - `?report=true` is assumed, and when `true`, Cronitor will be notified of the job's status. 
+    - `?dry=true` will not send any notifications or effects, but will still perform all checks and logging for runtime testing.
+      - `?force=true` will skip configuration time checks and send notifications regardless of how long it's been since the last notification.
+- `/api/health` is a simple health check endpoint. Authorization optional.
+- `/api/check` is a simple endpoint to check authorization.
+- `/api/config` is the configuration endpoint. Authorization required.
+  - `GET` will return the current configuration.
+  - `POST` will update the configuration. Requires a valid configuration object. Validation will be performed.
+
 [nextjs]: https://nextjs.org/
 [life360-node-api]: https://github.com/kaylathedev/life360-node-api
 [vercel]: https://vercel.com
@@ -58,3 +81,5 @@ might be easier (although I require Node APIs, I believe).
 [cron-jobs]: https://cron-jobs.org
 [upstash]: https://upstash.com
 [discord]: https://discord.com
+[winston]: https://github.com/winstonjs/winston
+[graphana-loki]: https://grafana.com/oss/loki/
