@@ -1,7 +1,6 @@
 import { getMatchingTime } from '@/timing';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getDistance } from '@/location';
-import { env } from '@/env/server.mjs';
 import monitorAsync from '@/monitor';
 import { sendNotification } from '@/notify';
 import {
@@ -31,11 +30,6 @@ type ResponseStatus =
 	| 'already-notified'
 	| 'notified'
 	| 'error';
-
-const center = {
-	latitude: env.CENTER_LATITUDE,
-	longitude: env.CENTER_LONGITUDE
-};
 
 export default async function handler(
 	req: NextApiRequest,

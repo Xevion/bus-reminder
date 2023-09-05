@@ -1,22 +1,15 @@
-import type {NextApiRequest, NextApiResponse} from 'next';
-import {env} from '@/env/server.mjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { unauthorized } from '@/utils/helpers';
 
 type StatusData = { status: ResponseStatus };
 
-type ResponseStatus =
-    | 'unauthorized'
-    | 'success';
-
+type ResponseStatus = 'unauthorized' | 'success';
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<StatusData>
+	req: NextApiRequest,
+	res: NextApiResponse<StatusData>
 ) {
-    if (req.query.key != env.API_KEY) {
-        // auth failed
-        res.status(401).json({ status: 'unauthorized' });
-        return;
-    }
+	if (unauthorized(req, res)) return;
 
-    res.status(200).json({ status: 'success'});
+	res.status(200).json({ status: 'success' });
 }
