@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import { intersection } from '@/sets';
+import { z } from 'zod';
 
 type ParsedTime = {
 	hours: number;

@@ -1,18 +1,18 @@
-import { getMatchingTime } from '@/timing';
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { getDistance } from '@/location';
-import monitorAsync from '@/monitor';
-import { sendNotification } from '@/notify';
 import {
 	checkIdentifier,
 	fetchConfiguration,
 	getKey,
 	markIdentifier
 } from '@/db';
-import { localNow } from '@/utils/timezone';
+import { getDistance } from '@/location';
 import logger from '@/logger';
+import monitorAsync from '@/monitor';
+import { sendNotification } from '@/notify';
+import { getMatchingTime } from '@/timing';
 import { parseBoolean } from '@/utils/client';
 import { unauthorized } from '@/utils/server';
+import { localNow } from '@/utils/timezone';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 type ResponseData = {
 	diff: number;
@@ -53,7 +53,10 @@ export default async function handler(
 		const matching = await getMatchingTime(config, now);
 
 		// No matching time - no notification to send.
-		if (matching == null) return { status: 'no-matching-time' };
+		if (matching == null) {
+			logger.info('No matching time.', { time: now });
+			return { status: 'no-matching-time' };
+		}
 
 		// Get the key for this notification (name + time)
 		const key = getKey(matching.name, now);
@@ -68,11 +71,13 @@ export default async function handler(
 
 		// TODO: Properly draw from environment MAX_DISTANCE
 		const distance = distanceResult.value;
-		if (distance > 280)
+		if (distance > 280) {
+			logger.debug('Distance is out of range.', { distance });
 			return {
 				status: 'out-of-range',
 				identifier
 			};
+		}
 
 		// Check if I have already been notified
 		const marked = await checkIdentifier(key);
@@ -83,6 +88,7 @@ export default async function handler(
 			};
 
 		// Send notification, mark (expire in 1 month)
+		logger.info('Sending notification, marking identifier.', { identifier });
 		await sendNotification(`${matching.message} (${matching.name})`);
 		await markIdentifier(key, true, 60 * 60 * 24 * 31);
 
@@ -93,7 +99,10 @@ export default async function handler(
 		logger.debug('Evaluating cron...');
 
 		let result;
-		if (process.env.NODE_ENV === 'production' && parseBoolean(req.query.report ?? 'true'))
+		if (
+			process.env.NODE_ENV === 'production' &&
+			parseBoolean(req.query.report ?? 'true')
+		)
 			result = await monitorAsync(innerFunction);
 		else result = await innerFunction();
 
