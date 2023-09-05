@@ -28,17 +28,8 @@ export function getKey(identifier: string, now: Date) {
 	return format(now, 'yyyy-MM-dd') + ':' + identifier;
 }
 
-// TODO; Move away from generating key inside these functions while also returning it.
-
-export async function checkIdentifier(
-	identifier: string,
-	now: Date = new Date()
-): Promise<{ marked: boolean; key: string }> {
-	const key = getKey(identifier, now);
-	return {
-		marked: (await redis.get(key)) === '1',
-		key
-	};
+export async function checkIdentifier(key: string): Promise<boolean> {
+	return (await redis.get(key)) === '1';
 }
 
 export async function markIdentifier(
