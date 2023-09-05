@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { unauthorized } from '@/utils/helpers';
+import { unauthorized } from '@/utils/server';
 
 type StatusData = { status: ResponseStatus };
 

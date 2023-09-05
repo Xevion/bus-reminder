@@ -13,12 +13,3 @@ export function unauthorized(
 	}
 	return false;
 }
-
-export function parseBoolean(
-	value: string | string[] | undefined | null
-): boolean {
-	if (value == undefined) return false;
-	if (Array.isArray(value)) return false;
-	value = value.toLowerCase();
-	return value === 'true' || value === '1' || value === 'yes';
-}

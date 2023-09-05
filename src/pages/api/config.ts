@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { fetchConfiguration, setConfiguration } from '@/db';
 import { Configuration, ConfigurationSchema } from '@/timing';
-import { unauthorized } from '@/utils/helpers';
+import { unauthorized } from '@/utils/server';
 
 type StatusData = { status: ResponseStatus };
 

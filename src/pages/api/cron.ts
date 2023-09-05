@@ -11,7 +11,8 @@ import {
 } from '@/db';
 import { localNow } from '@/utils/timezone';
 import logger from '@/logger';
-import { parseBoolean, unauthorized } from '@/utils/helpers';
+import { parseBoolean } from '@/utils/client';
+import { unauthorized } from '@/utils/server';
 
 type ResponseData = {
 	diff: number;
