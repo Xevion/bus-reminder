@@ -1338,6 +1338,11 @@ triple-beam@^1.3.0:
   resolved "https://registry.yarnpkg.com/triple-beam/-/triple-beam-1.4.1.tgz#6fde70271dc6e5d73ca0c3b24e2d92afb7441984"
   integrity sha512-aZbgViZrg1QNcG+LULa7nhZpJTZSLm/mXnHXnbAbjmN5aSa0y7V+wvv6+4WaBtpISJzThKy+PIPxc1Nq1EJ9mg==
 
+"true-myth@^5":
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/true-myth/-/true-myth-5.4.0.tgz#eff4a4d09e47d616c8089d42c1e78ac9640c68a2"
+  integrity sha512-MonJqkJf+VOXZ2msbpvAI1uJWoyfCN7nirR8/fNK+IlFDWYNLb9iqeAc2uhIbAQBynHtM02azZgepQDQclOwAw==
+
 ts-mixer@^6.0.2:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/ts-mixer/-/ts-mixer-6.0.3.tgz#69bd50f406ff39daa369885b16c77a6194c7cae6"

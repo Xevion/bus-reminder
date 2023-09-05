@@ -1,6 +1,8 @@
 import { env } from '@/env/server.mjs';
 // @ts-ignore
 import * as life360 from 'life360-node-api';
+import logger from '@/logger';
+import Result, { err, ok } from 'true-myth/result';
 
 const center = {
 	longitude: env.CENTER_LONGITUDE,
@@ -53,42 +55,45 @@ export function distance(
 /**
  * @returns The distance in meters between me and the center
  */
-export async function getDistance(): Promise<number> {
+export async function getDistance(): Promise<Result<number, string>> {
 	let client;
 	try {
 		// Set up the Life360 API client
 		client = await life360.login(env.LIFE360_USERNAME, env.LIFE360_PASSWORD);
 	} catch (e) {
-		throw new Error(
-			`Failed while logging in to Life360: ${
+		return err(
+			`Failed while logging in to Life360 (${
 				e instanceof Error ? e.message : e
-			}`
+			})`
 		);
 	}
 
+	// Get my current location
 	let me;
 	try {
-		// Get my current location
 		const circles = await client.listCircles();
+		// Assumed only in one circle (the first)
 		const myCircle = circles[0];
+		logger.debug(`${circles.length} circles found, using first.`, {
+			circle: myCircle
+		});
 		const members = await myCircle.listMembers();
+
 		me = members.findById(env.LIFE360_MEMBER_ID);
 	} catch (e) {
-		throw new Error(
+		return err(
 			`Failed while getting my location from Life360: ${
 				e instanceof Error ? e.message : e
 			}`
 		);
 	}
 
-	// Parse my location into latitude and longitude
+	// Parse my latitude and longitude into floats
 	const current = {
 		latitude: parseFloat(me.location.latitude),
 		longitude: parseFloat(me.location.longitude)
 	};
 
-	// Calculate the distance between my location and the center
-	const difference = distance(current, center, 'K') * 1000;
-
-	return difference;
+	// Calculate the distance between my location and the center, multiply x1000 for meters
+	return ok(distance(current, center, 'K') * 1000);
 }
