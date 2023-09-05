@@ -1,8 +1,6 @@
 // @ts-check
 import { z } from 'zod';
-
-// If this line fails, you're not running Node v18 or higher. Please upgrade.
-const TimezoneSchema = z.enum(Intl.supportedValuesOf("timeZone"));
+import { TimezoneSchema } from '@/utils/timezone';
 
 /**
  * Specify your server-side environment variables schema here.
