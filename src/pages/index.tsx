@@ -13,6 +13,7 @@ import { fetchConfiguration } from '@/db';
 import { useForm } from 'react-hook-form';
 import { ConfigurationSchema } from '@/timing';
 import { useRouter } from 'next/router';
+import Layout from '@/components/Layout';
 
 type Props = {
 	config: string;
@@ -101,7 +102,7 @@ const IndexPage: NextPage<Props> = ({ config }) => {
 	}
 
 	return (
-		<div className="flex text-zinc-200 bg-zinc-900 min-h-screen max-h-screen h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+		<Layout className="max-h-screen">
 			<div className="px-5 sm:mx-auto sm:w-full sm:max-w-4xl">
 				<div className="bg-black/ py-8 px-4 shadow sm:rounded-lg sm:px-10">
 					<form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +152,7 @@ const IndexPage: NextPage<Props> = ({ config }) => {
 					</form>
 				</div>
 			</div>
-		</div>
+		</Layout>
 	);
 };
 
