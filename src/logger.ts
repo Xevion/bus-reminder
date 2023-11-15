@@ -23,7 +23,7 @@ const logger: Logger = createLogger({
 		}),
 		new transports.Console({
 			format: format.combine(
-				env.NODE_ENV == 'production' ? format.json() : format.colorize(),
+				env.NODE_ENV !== 'development' ? format.json() : format.colorize(),
 				format.printf(
 					({ level, message, timestamp, stack }) =>
 						`${timestamp} ${level}: ${stack || message}`
