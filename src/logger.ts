@@ -34,7 +34,7 @@ const logger: Logger = createLogger({
 	exceptionHandlers: [
 		new transports.Console({
 			format: format.combine(
-				format.colorize(),
+				env.NODE_ENV !== 'development' ? format.json() : format.colorize(),
 				format.printf(
 					({ level, message, timestamp, stack }) =>
 						`${timestamp} ${level}: ${stack || message}`
