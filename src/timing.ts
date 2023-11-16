@@ -1,12 +1,12 @@
 import { intersection } from '@/sets';
 import { z } from 'zod';
 
-type ParsedTime = {
+export type ParsedTime = {
 	hours: number;
 	minutes: number;
 };
 
-const DayEnumSchema = z.enum([
+export const DayEnumSchema = z.enum([
 	'monday',
 	'tuesday',
 	'wednesday',
@@ -15,7 +15,7 @@ const DayEnumSchema = z.enum([
 	'saturday',
 	'sunday'
 ]);
-type DayEnum = z.infer<typeof DayEnumSchema>;
+export type DayEnum = z.infer<typeof DayEnumSchema>;
 
 const TimeConfigSchema = z.object({
 	// A short name to be included in notifications
@@ -160,8 +160,8 @@ export const ConfigurationSchema = z.object({
 					message: `A maxLate's value cannot place it outside of the given day (${maxLateTime.hours
 						.toString()
 						.padStart(2, '0')}:${maxLateTime.minutes
-						.toString()
-						.padStart(2, '0')})`
+							.toString()
+							.padStart(2, '0')})`
 				});
 		});
 
@@ -202,7 +202,7 @@ export const ConfigurationSchema = z.object({
 });
 export type Configuration = z.infer<typeof ConfigurationSchema>;
 
-const dayAsNumber: Record<string, DayEnum> = {
+export const dayAsNumber: Record<string, DayEnum> = {
 	1: 'monday',
 	2: 'tuesday',
 	3: 'wednesday',
@@ -210,6 +210,16 @@ const dayAsNumber: Record<string, DayEnum> = {
 	5: 'friday',
 	6: 'saturday',
 	0: 'sunday'
+};
+
+export const numberAsDay: Record<DayEnum, number> = {
+	monday: 1,
+	tuesday: 2,
+	wednesday: 3,
+	thursday: 4,
+	friday: 5,
+	saturday: 6,
+	sunday: 0
 };
 
 export async function getMatchingTime(
