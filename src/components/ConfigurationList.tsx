@@ -4,7 +4,8 @@ import {
   type Configuration,
   type DayEnum,
   numberAsDay,
-  ParsedTime
+  ParsedTime,
+  isTimeMatched
 } from '@/timing';
 import clsx from 'clsx';
 
@@ -87,7 +88,7 @@ const ConfigurationItem: FunctionComponent<{
                     : 'text-yellow-900 bg-yellow-500/80'
                 )}
               >
-                Not Current
+                {isCurrent ? 'Current' : 'Not Current'}
               </p>
             </div>
           </div>
@@ -131,7 +132,7 @@ const ConfigurationList: FunctionComponent<ConfigurationListProps> = ({
         {configs.times.map((config, index) => (
           <ConfigurationItem
             key={index}
-            isCurrent={index % 2 == 0}
+            isCurrent={isTimeMatched(config)}
             days={config.days}
             title={config.name}
             message={config.message}
