@@ -72,7 +72,7 @@ const ConfigurationItem: FunctionComponent<{
 }> = ({ title, isCurrent, days, message, timeString }) => {
   return (
     <li>
-      <a href="#" className="block bg-zinc-900 hover:bg-zinc-800">
+      <a className="block bg-zinc-900 hover:bg-zinc-800">
         <div className="px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
             <p className="truncate text-sm font-medium text-indigo-500">
