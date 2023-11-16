@@ -12,7 +12,7 @@ const LoginPage: NextPage = () => {
 
 	async function onSubmit(data: FormProps) {
 		const response = await fetch(`/api/check?key=${data.token}`);
-		
+
 		if (response.status === 200) {
 			setError(false);
 			router.push({ pathname: '/', query: { key: data.token } }).then();
@@ -21,8 +21,8 @@ const LoginPage: NextPage = () => {
 
 	return (
 		<Layout>
-			<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-				<div className="bg-black/ py-8 px-4 shadow sm:rounded-lg sm:px-10">
+			<div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md mx-4">
+				<div className="bg-black/ py-8 px-4 sm:rounded-lg sm:px-10">
 					<form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
 						<div>
 							<label
