@@ -1,4 +1,4 @@
-import { Client, Events, GatewayIntentBits } from 'discord.js';
+import { Client } from 'discord.js';
 import { env } from '@/env/server.mjs';
 
 export async function sendNotification(message: string): Promise<void> {
@@ -10,8 +10,7 @@ export async function sendNotification(message: string): Promise<void> {
 		await client.login(env.DISCORD_TOKEN);
 	} catch (e) {
 		throw new Error(
-			`Failed while logging in to Discord: ${
-				e instanceof Error ? e.message : e
+			`Failed while logging in to Discord: ${e instanceof Error ? e.message : e
 			}`
 		);
 	}
