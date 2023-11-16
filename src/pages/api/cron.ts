@@ -50,7 +50,7 @@ export default async function handler(
 		const now = localNow();
 
 		const config = await fetchConfiguration();
-		const matching = await getMatchingTime(config, now);
+		const matching = getMatchingTime(config, now);
 
 		// No matching time - no notification to send.
 		if (matching == null) {
@@ -94,7 +94,7 @@ export default async function handler(
 				: 'Dry run, not sending notification or marking identifier.',
 			{ identifier }
 		);
-		
+
 		// Send notification, mark (expire in 1 month)
 		if (!isDry) {
 			await sendNotification(`${matching.message} (${matching.name})`);

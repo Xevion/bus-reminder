@@ -222,28 +222,29 @@ export const numberAsDay: Record<DayEnum, number> = {
 	sunday: 0
 };
 
-export async function getMatchingTime(
+export function isTimeMatched(
+	time: TimeConfig,
+	now: Date = new Date()
+): boolean {
+	if (!time.days.has(dayAsNumber[now.getDay().toString()])) return false;
+	const nowTime = {
+		hours: now.getHours(),
+		minutes: now.getMinutes()
+	};
+
+	const startTime = time.time;
+	const endTime = addTime(time.time, time.maxLate ?? { hours: 0, minutes: 0 });
+
+	return (
+		compareTime(nowTime, startTime) >= 0 && compareTime(nowTime, endTime) <= 0
+	);
+}
+
+export function getMatchingTime(
 	config: Configuration,
 	now: Date = new Date()
-): Promise<TimeConfig | null> {
-	const times = config.times.filter((time) => {
-		// If the day doesn't match, skip.
-		if (!time.days.has(dayAsNumber[now.getDay().toString()])) return false;
-		const nowTime = {
-			hours: now.getHours(),
-			minutes: now.getMinutes()
-		};
-
-		const startTime = time.time;
-		const endTime = addTime(
-			time.time,
-			time.maxLate ?? { hours: 0, minutes: 0 }
-		);
-
-		return (
-			compareTime(nowTime, startTime) >= 0 && compareTime(nowTime, endTime) <= 0
-		);
-	});
+): TimeConfig | null {
+	const times = config.times.filter((time) => isTimeMatched(time, now));
 
 	// This shouldn't be thrown, if I did my job right.
 	if (times.length > 1)
