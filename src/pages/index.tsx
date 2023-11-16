@@ -10,9 +10,11 @@ import Layout from '@/components/Layout';
 import ConfigurationList from '@/components/ConfigurationList';
 import superjson from 'superjson';
 import type { Configuration } from '@/timing';
+import AccentedAlert from '@/components/AccentedAlert';
 
 type IndexPageProps = {
   json: string;
+  error?: string;
 };
 
 export async function getServerSideProps({
@@ -26,7 +28,8 @@ export async function getServerSideProps({
     const config = await fetchConfiguration({ times: [] }, true);
     return {
       props: {
-        json: superjson.stringify(config)
+        json: superjson.stringify(config),
+        error: 'NetworkError occurred while fetching resource.'
       }
     };
   }
@@ -39,10 +42,16 @@ export async function getServerSideProps({
   };
 }
 
-const IndexPage: NextPage<IndexPageProps> = ({ json }) => {
+const IndexPage: NextPage<IndexPageProps> = ({ error, json }) => {
   const config = superjson.parse<Configuration>(json);
+  const errorElement =
+    error != undefined ? (
+      <AccentedAlert className="mb-2" text={`An error has occured. ${error}`} />
+    ) : undefined;
+
   return (
     <Layout className="max-h-screen flex flex-col items-center">
+      {errorElement}
       <ConfigurationList configs={config} />
     </Layout>
   );
